@@ -1,0 +1,34 @@
+
+from __future__ import print_function
+from bcc import BPF
+from socket import inet_ntop, AF_INET, AF_INET6
+from struct import pack
+import argparse
+import ctypes as ct
+
+# define BPF program
+bpf_text_kprobe = """
+
+#include <uapi/linux/ptrace.h>
+#include <uapi/linux/ip.h>
+#include <net/sock.h>
+#include <bcc/proto.h>
+
+BPF_HASH(pid_map, u32, u32);
+int kprobe__icmp_rcv(struct pt_regs *ctx, struct sk_buff *skb)
+{
+	u32 pid = bpf_get_current_pid_tgid();
+	u32 val = 1;
+	bpf_trace_printk("Hello world!");
+	pid_map.update(&pid, &val);
+	return 0;
+}
+"""
+
+b = BPF(text=bpf_text_kprobe)
+pidMap=b["pid_map"]
+
+while True:
+	for k,v in pidMap.items():
+		print("Pid=%s is sending icmp packet"%(str(k)))
+	pidMap.clear()
