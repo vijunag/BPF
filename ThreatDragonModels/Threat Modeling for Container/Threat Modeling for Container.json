@@ -1,0 +1,17 @@
+{
+  "summary": {
+    "title": "Threat Modeling for Container",
+    "owner": "Vijay Nag",
+    "description": "Software load balancer proxies are a common deployment in the container world as side car. A side car is a proxy that assists application in performing actions such as SSL off-loading, load balancing, logging and analytics."
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "title": "Side-car Proxy",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      }
+    ]
+  }
+}
